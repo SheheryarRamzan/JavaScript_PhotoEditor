@@ -194,6 +194,9 @@ function resetFilter()
     };
 
     applyFilters();
+    
+    // Reset the slider and value display to default
+    updateSlider(document.querySelector('.filter button.active'));
 }
 
 //------------------------------------DOWNLOADING IMAGE------------------------------
