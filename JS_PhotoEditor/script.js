@@ -37,12 +37,12 @@ function openimg()
 
 //------------------------------FIXING FILTER BUTTONS------------------------------
 
-filter_opt = document.querySelectorAll('.filter button')
-filter_name = document.querySelector('.filter-info .name')
+const filterOpt = document.querySelectorAll('.filter button')
+const filterName = document.querySelector('.filter-info .name')
 
-slider_input = document.querySelector(".slider input");
-slider_value = document.querySelector(".filter-info .value");
-image_preview = document.querySelector(".preview-img img");
+const sliderInput = document.querySelector(".slider input");
+const sliderValue = document.querySelector(".filter-info .value");
+const imagePreview = document.querySelector(".preview-img img");
 
 // Default filter values
 let filterValues = {
@@ -58,32 +58,32 @@ let filterValues = {
 // Function to update the slider
 function updateSlider(temp) {
         const value = filterValues[temp.id];
-        slider_input.value = value;
+        sliderInput.value = value;
 
         if (temp.id === "blur") {
-            slider_input.max = "200";
-            slider_value.innerText = value + "px";
+            sliderInput.max = "200";
+            sliderValue.innerText = value + "px";
         } else if (temp.id === "rotate") {
-            slider_input.max = "360";
-            slider_value.innerText = value + "deg";
+            sliderInput.max = "360";
+            sliderValue.innerText = value + "deg";
         } else {
-            slider_value.innerText = value + "%";
+            sliderValue.innerText = value + "%";
         }
 }
 
 function applyFilters() {
         const { brightness, saturation, inversion, grayscale, sepia, blur, rotate } = filterValues;
-        image_preview.style.filter = `grayscale(${grayscale}%) blur(${blur}px) brightness(${brightness}%) invert(${inversion}%) saturate(${saturation}%) sepia(${sepia}%)`;
-        image_preview.style.transform = `rotate(${rotate}deg)`;
+        imagePreview.style.filter = `grayscale(${grayscale}%) blur(${blur}px) brightness(${brightness}%) invert(${inversion}%) saturate(${saturation}%) sepia(${sepia}%)`;
+        imagePreview.style.transform = `rotate(${rotate}deg)`;
 }
 
-filter_opt.forEach(temp => 
+filterOpt.forEach(temp => 
 {
 
         temp.addEventListener('click', function(){
         document.querySelector(".filter .active").classList.remove("active");
         temp.classList.add('active');
-        filter_name.innerText= temp.innerText
+        filterName.innerText= temp.innerText
 
 
         //-------------------GETTING ALL FILTERS FIXED (NOT AFFECTED BY OTHER FILTERS)----------------------
@@ -93,31 +93,31 @@ filter_opt.forEach(temp =>
 
 //-------------------------------FIXING SLIDER--------------------------------------
 
-slider_input.addEventListener('input', function()
+sliderInput.addEventListener('input', function()
 {
     //---------------------------SETTING SLIDER VALUE--------------------------
 
-    console.log(slider_input.value);    //PRINTING TO CONSOLE TO DRY RUN
+    console.log(sliderInput.value);    //PRINTING TO CONSOLE TO DRY RUN
 
 
-    const selectedfilter=document.querySelector('.filter .active');
+    const selectedFilter = document.querySelector('.filter .active');
 
-    if (selectedfilter.id==="rotate")
+    if (selectedFilter.id==="rotate")
     {
-        slider_value.innerText = slider_input.value + "deg";
+        sliderValue.innerText = sliderInput.value + "deg";
     
     }
-    else if(selectedfilter.id==="blur")
+    else if(selectedFilter.id==="blur")
     {
-        slider_value.innerText = slider_input.value + "px"
+        sliderValue.innerText = sliderInput.value + "px"
     }
     else 
     {
-        slider_value.innerText = slider_input.value + "%";
+        sliderValue.innerText = sliderInput.value + "%";
     }
-    //slider_value.innerText = slider_input.value + "%";
+    //sliderValue.innerText = sliderInput.value + "%";
     
-     filterValues[selectedfilter.id] = slider_input.value;
+     filterValues[selectedFilter.id] = sliderInput.value;
 
     //--------------------------------------APPLYING FILTERS TO IMAGE------------------------------------------
     applyFilters();
@@ -203,8 +203,8 @@ function downloadImg()
     const image_canvas = document.createElement('canvas');
     const canvas_image = image_canvas.getContext('2d');
     
-    image_canvas.width = image_preview.naturalWidth; 
-    image_canvas.height = image_preview.naturalHeight;
+    image_canvas.width = imagePreview.naturalWidth; 
+    image_canvas.height = imagePreview.naturalHeight;
     
     canvas_image.filter='grayscale('+filterValues.grayscale+'%) blur('+filterValues.blur+'px) brightness('+filterValues.brightness+'%) invert('+filterValues.inversion+'%) saturate('+filterValues.satuarate+'%) sepia('+filterValues.sepia+'%)';
     canvas_image.save();
@@ -213,7 +213,7 @@ function downloadImg()
     canvas_image.scale(fhoriz, fver);
     canvas_image.rotate(rotate * Math.PI / 180);
 
-    canvas_image.drawImage(image_preview,-image_canvas.width/2,-image_canvas.height/2,image_canvas.width,image_canvas.height);
+    canvas_image.drawImage(imagePreview,-image_canvas.width/2,-image_canvas.height/2,image_canvas.width,image_canvas.height);
     canvas_image.restore();
 
     let image_link = document.createElement("a");
