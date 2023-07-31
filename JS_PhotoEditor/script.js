@@ -44,9 +44,38 @@ slider_input = document.querySelector(".slider input");
 slider_value = document.querySelector(".filter-info .value");
 image_preview = document.querySelector(".preview-img img");
 
-var brightness = 100, satuarate = 100, inversion = 0, gray_scale = 0, blur = 0, sepia = 0, rotate=0; //Setting values to default
+// Default filter values
+let filterValues = {
+    brightness: 100,
+    saturation: 100,
+    inversion: 0,
+    grayscale: 0,
+    sepia: 0,
+    blur: 0,
+    rotate: 0,
+  };
+  
+// Function to update the slider
+function updateSlider(temp) {
+        const value = filterValues[temp.id];
+        slider_input.value = value;
 
+        if (temp.id === "blur") {
+            slider_input.max = "200";
+            slider_value.innerText = value + "px";
+        } else if (temp.id === "rotate") {
+            slider_input.max = "360";
+            slider_value.innerText = value + "deg";
+        } else {
+            slider_value.innerText = value + "%";
+        }
+}
 
+function applyFilters() {
+        const { brightness, saturation, inversion, grayscale, sepia, blur, rotate } = filterValues;
+        image_preview.style.filter = `grayscale(${grayscale}%) blur(${blur}px) brightness(${brightness}%) invert(${inversion}%) saturate(${saturation}%) sepia(${sepia}%)`;
+        image_preview.style.transform = `rotate(${rotate}deg)`;
+}
 
 filter_opt.forEach(temp => 
 {
@@ -58,41 +87,7 @@ filter_opt.forEach(temp =>
 
 
         //-------------------GETTING ALL FILTERS FIXED (NOT AFFECTED BY OTHER FILTERS)----------------------
-
-        switch(temp.id)
-        {
-            case "brightness":
-                slider_input.value = brightness;
-                slider_value.innerText = brightness + "%";
-                break;
-            case "inversion":
-                slider_input.value = inversion;
-                slider_value.innerText = inversion + "%";
-                break;
-            case "saturation":
-                slider_input.value = satuarate;
-                slider_value.innerText = satuarate + "%";
-                break;
-            case "grayscale":
-                slider_input.value = gray_scale;
-                slider_value.innerText = gray_scale + "%";
-                break;
-            case "sepia":
-                slider_input.value = sepia;
-                slider_value.innerText = sepia + "%";
-                break;
-            case "blur":
-                slider_input.max="200";
-                slider_input.value = blur;
-                slider_value.innerText = blur + "px";
-                break;
-             case "rotate":
-                slider_input.value = rotate;
-                slider_input.max="360";
-                slider_value.innerText = rotate + "deg";
-                break;
-        }
-
+        updateSlider(temp);
     });
 });
 
@@ -105,54 +100,27 @@ slider_input.addEventListener('input', function()
     console.log(slider_input.value);    //PRINTING TO CONSOLE TO DRY RUN
 
 
-    selectedfilter=document.querySelector('.filter .active');
+    const selectedfilter=document.querySelector('.filter .active');
 
     if (selectedfilter.id==="rotate")
     {
         slider_value.innerText = slider_input.value + "deg";
     
     }
-    else if (selectedfilter.id==="brightness" || selectedfilter.id==="sepia" || selectedfilter.id==="grayscale" || 
-    selectedfilter.id==="saturation" || selectedfilter.id==="inversion")
-    {
-        slider_value.innerText = slider_input.value + "%";
-    }
-
     else if(selectedfilter.id==="blur")
     {
         slider_value.innerText = slider_input.value + "px"
     }
+    else 
+    {
+        slider_value.innerText = slider_input.value + "%";
+    }
     //slider_value.innerText = slider_input.value + "%";
     
-    switch(selectedfilter.id)
-    {
-        case "brightness":
-            brightness = slider_input.value;
-            break;
-        case "saturation":
-            satuarate = slider_input.value;
-            break;
-        case "inversion":
-            inversion = slider_input.value;
-            break;
-        case "grayscale":
-            gray_scale = slider_input.value;
-            break;
-        case "sepia":
-            sepia = slider_input.value;
-            break;
-        case "blur":
-            blur = slider_input.value;
-            break;
-        case "rotate":
-            rotate = slider_input.value;
-            break;
-    }
+     filterValues[selectedfilter.id] = slider_input.value;
 
     //--------------------------------------APPLYING FILTERS TO IMAGE------------------------------------------
-
-    image_preview.style.filter = 'grayscale('+gray_scale+'%) blur('+blur+'px) brightness('+brightness+'%) invert('+inversion+'%) saturate('+satuarate+'%) sepia('+sepia+'%)'
-    image_preview.style.transform = 'rotate('+rotate+'deg)'
+    applyFilters();
    
 })
 
@@ -215,9 +183,17 @@ function flipVertical()
 
 function resetFilter()
 {
-    brightness = 100, satuarate = 100, inversion = 0, gray_scale = 0, blur = 0, sepia = 0, rotate=0;
-    image_preview.style.filter = 'grayscale('+gray_scale+'%) blur('+blur+'px) brightness('+brightness+'%) invert('+inversion+'%) saturate('+satuarate+'%) sepia('+sepia+'%)'
-    image_preview.style.transform = 'rotate('+rotate+'deg)'
+    filterValues = {
+        brightness: 100,
+        saturation: 100,
+        inversion: 0,
+        grayscale: 0,
+        sepia: 0,
+        blur: 0,
+        rotate: 0,
+    };
+
+    applyFilters();
 }
 
 //------------------------------------DOWNLOADING IMAGE------------------------------
@@ -230,7 +206,7 @@ function downloadImg()
     image_canvas.width = image_preview.naturalWidth; 
     image_canvas.height = image_preview.naturalHeight;
     
-    canvas_image.filter='grayscale('+gray_scale+'%) blur('+blur+'px) brightness('+brightness+'%) invert('+inversion+'%) saturate('+satuarate+'%) sepia('+sepia+'%)';
+    canvas_image.filter='grayscale('+filterValues.grayscale+'%) blur('+filterValues.blur+'px) brightness('+filterValues.brightness+'%) invert('+filterValues.inversion+'%) saturate('+filterValues.satuarate+'%) sepia('+filterValues.sepia+'%)';
     canvas_image.save();
 
     canvas_image.translate(image_canvas.width/2, image_canvas.height/2);
