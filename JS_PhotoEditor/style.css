@@ -71,8 +71,12 @@ body{
 }
 .filter button.active{
   color: #fff;
-  border-color: #5372F0;
-  background: #5372F0;
+  border-color: #007f5f;
+  background: #007f5f;
+  transition: 0.3s;
+}
+.filter button.active:hover,.controls .choose-img:hover{
+  background-color: #464646;
 }
 .filter .slider{
   margin-top: 12px;
@@ -142,13 +146,18 @@ body{
   background: #6C757D;
 }
 .controls .choose-img{
-  background: #6C757D;
-  border: 1px solid #6C757D;
+  background: #007f5f;
+  border: 1px solid #007f5f;
+  transition: 0.3s;
 }
 .controls .save-img{
   margin-left: 5px;
-  background: #5372F0;
-  border: 1px solid #5372F0;
+  background: #e29578;
+  border: 1px solid #e29578;
+  transition: 0.3s;
+}
+.controls .save-img:hover{
+  background: #bc4749;
 }
 
 @media screen and (max-width: 760px) {
